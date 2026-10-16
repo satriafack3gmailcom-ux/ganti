@@ -1,25 +1,46 @@
-import javax.swing.*;
+package strukturdata;
 
 public class Main {
 
     public static void main(String[] args) {
+        LinkedStack<Koran> stack = new LinkedStack<>();
 
-        // Membuat LinkedStack dengan tipe data Box
-        LinkedStack<Box> stack = new LinkedStack<>();
+        // Dataset sesuai tabel: Koran nomor 1 s.d. 6
+        String[] nama = {"Jawa Pos", "Jawa Pos", "Jawa Pos", "Jawa Pos", "Jawa Pos", "Jawa Pos"};
+        String[] tgl  = {"08/11/2026", "07/11/2026", "06/11/2026",
+                "05/11/2026", "04/11/2026", "03/11/2026"};
 
-        // Memasukkan 6 data Box secara berurutan
-        stack.push(new Box(40.0, 10.5));
-        stack.push(new Box(35.0, 9.0));
-        stack.push(new Box(29.0, 7.5));
-        stack.push(new Box(25.5, 6.0));
-        stack.push(new Box(19.0, 5.4));
-        stack.push(new Box(15.0, 2.0));
+        // Kronologis: edisi terlama (03/11) masuk lebih dulu, edisi terbaru (08/11) terakhir
+        // sehingga edisi terbaru berada di posisi paling atas stack.
+        System.out.println("=== Proses Push Koran (Kronologis) ===");
+        for (int i = nama.length - 1; i >= 0; i--) {
+            Koran koran = new Koran();
+            koran.setNama(nama[i]);
+            koran.setTglTerbit(tgl[i]);
 
-        // Menampilkan hasil
-        System.out.println("=== DATA BOX DALAM LINKED STACK ===");
-        System.out.println("Jumlah Box: " + stack.size());
-        System.out.println("Data dari TOP ke BOTTOM:");
+            stack.push(koran);
+            System.out.println("Push Koran " + (i + 1) + " -> "
+                    + koran.getNama() + " | " + koran.getTglTerbit());
+        }
 
-        stack.display();
+        System.out.println("\nJumlah koran dalam stack: " + stack.size());
+        System.out.println("Koran paling atas (terbaru): "
+                + stack.peek().getNama() + " | " + stack.peek().getTglTerbit());
+
+        // Isi stack dari atas ke bawah
+        System.out.println("\n=== Isi Stack (Atas -> Bawah) ===");
+        int[] nomor = {1};
+        stack.forEachFromTop(k -> {
+            System.out.println("Koran " + nomor[0] + " | "
+                    + k.getNama() + " | " + k.getTglTerbit());
+            nomor[0]++;
+        });
+
+        // Simulasi pengambilan koran (pop): yang terbaru keluar lebih dulu
+        System.out.println("\n=== Proses Pop (Pengambilan Koran) ===");
+        while (!stack.isEmpty()) {
+            Koran k = stack.pop();
+            System.out.println("Pop -> " + k.getNama() + " | " + k.getTglTerbit());
+        }
     }
 }

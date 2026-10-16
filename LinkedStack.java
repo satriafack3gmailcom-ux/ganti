@@ -1,46 +1,43 @@
+package strukturdata;
+
+// Stack generik yang diimplementasikan dengan Linked List (manual)
 public class LinkedStack<T> {
 
-    private static class Node<T> {
+    private class Node {
         T data;
-        Node<T> next;
+        Node next;
 
         Node(T data) {
             this.data = data;
         }
     }
 
-    private Node<T> top;
+    private Node top;
     private int size;
 
-    public LinkedStack() {
-        top = null;
-        size = 0;
-    }
-
+    // Menambah data ke puncak stack
     public void push(T data) {
-        Node<T> newNode = new Node<>(data);
+        Node newNode = new Node(data);
         newNode.next = top;
         top = newNode;
         size++;
     }
 
+    // Mengambil dan menghapus data dari puncak stack
     public T pop() {
-        if (top == null) {
-            throw new IllegalStateException("Stack kosong");
+        if (isEmpty()) {
+            System.out.println("Stack kosong!");
+            return null;
         }
-
         T data = top.data;
         top = top.next;
         size--;
         return data;
     }
 
+    // Melihat data di puncak stack tanpa menghapusnya
     public T peek() {
-        if (top == null) {
-            throw new IllegalStateException("Stack kosong");
-        }
-
-        return top.data;
+        return isEmpty() ? null : top.data;
     }
 
     public boolean isEmpty() {
@@ -51,11 +48,11 @@ public class LinkedStack<T> {
         return size;
     }
 
-    public void display() {
-        Node<T> current = top;
-
+    // Mengunjungi isi stack dari puncak ke dasar tanpa mengubah stack
+    public void forEachFromTop(java.util.function.Consumer<T> action) {
+        Node current = top;
         while (current != null) {
-            System.out.println(current.data);
+            action.accept(current.data);
             current = current.next;
         }
     }
